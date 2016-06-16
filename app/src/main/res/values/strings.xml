@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Aadhaar Reader</string>
+    <string name="table_heading">Items</string>
+    <string name="table_heading_detail">Value</string>
+    <string name="welcome_message">Scan your aadhaar card to view information</string>
+    <string name="top_bar_message">SCAN AADHAAR CARD</string>
+    <string name="scan_new_card">Scan New Aadhaar Card</string>
+    <string name="view_saved_card">View Saved Aadhaar Cards</string>
+    <string name="label_name">Name</string>
+    <string name="label_uid">UID</string>
+    <string name="label_gender">GENDER</string>
+    <string name="label_yob">YEAR OF BIRTH</string>
+    <string name="label_co">CARE OF</string>
+    <string name="label_vtc">VILLAGE TEHSIL</string>
+    <string name="label_po">POST OFFICE</string>
+    <string name="label_dist">DISTRICT</string>
+    <string name="label_state">STATE</string>
+    <string name="label_pc">POSTAL CODE</string>
+    <string name="label_save">SAVE</string>
+    <string name="label_cancel">CANCEL</string>
+</resources>

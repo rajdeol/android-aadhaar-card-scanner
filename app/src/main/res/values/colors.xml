@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="top_bar_background">#EBF1DE</color>
+    <color name="top_bar_text_color">#D52736</color>
+    <color name="app_background">#EEEEEE</color>
+    <color name="home_list_background_color">#DCE1E3</color>
+    <color name="scanned_data_text_color">#D52736</color>
+    <color name="scanned_data_item_border">#828790</color>
+    <color name="action_save_background">#FAB50F</color>
+    <color name="action_cancel_background">#D62736</color>
+    <color name="white">#FFFFFF</color>
+</resources>
