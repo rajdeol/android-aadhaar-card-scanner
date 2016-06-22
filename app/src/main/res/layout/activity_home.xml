@@ -91,6 +91,7 @@
         <!-- View Saved Cards -->
         <LinearLayout
             android:id="@+id/ll_view_saved_wrapper"
+            android:onClick="showSavedCards"
             android:layout_width="match_parent"
             android:layout_height="@dimen/home_list_item_height"
             android:background="@android:drawable/dialog_holo_light_frame"

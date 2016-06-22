@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.rajdeol.aadhaarreader.utils.DataAttributes;
 import com.rajdeol.aadhaarreader.utils.Storage;
 
 import org.json.JSONArray;
@@ -26,18 +27,6 @@ import java.io.InputStream;
 import java.io.StringReader;
 
 public class HomeActivity extends AppCompatActivity {
-    // declare xml attributes of aadhar card QR code xml response
-    static final String AADHAAR_DATA_TAG = "PrintLetterBarcodeData",
-    AADHAR_UID_ATTR = "uid",
-    AADHAR_NAME_ATTR = "name",
-    AADHAR_GENDER_ATTR = "gender",
-    AADHAR_YOB_ATTR = "yob",
-    AADHAR_CO_ATTR = "co",
-    AADHAR_VTC_ATTR = "vtc",
-    AADHAR_PO_ATTR = "po",
-    AADHAR_DIST_ATTR = "dist",
-    AADHAR_STATE_ATTR = "state",
-    AADHAR_PC_ATTR = "pc";
 
     // variables to store extracted xml data
     String uid,name,gender,yearOfBirth,careOf,villageTehsil,postOffice,district,state,postCode;
@@ -138,28 +127,28 @@ public class HomeActivity extends AppCompatActivity {
             while (eventType != XmlPullParser.END_DOCUMENT) {
                 if(eventType == XmlPullParser.START_DOCUMENT) {
                     Log.d("Rajdeol","Start document");
-                } else if(eventType == XmlPullParser.START_TAG && AADHAAR_DATA_TAG.equals(parser.getName())) {
+                } else if(eventType == XmlPullParser.START_TAG && DataAttributes.AADHAAR_DATA_TAG.equals(parser.getName())) {
                     // extract data from tag
                     //uid
-                    uid = parser.getAttributeValue(null,AADHAR_UID_ATTR);
+                    uid = parser.getAttributeValue(null,DataAttributes.AADHAR_UID_ATTR);
                     //name
-                    name = parser.getAttributeValue(null,AADHAR_NAME_ATTR);
+                    name = parser.getAttributeValue(null,DataAttributes.AADHAR_NAME_ATTR);
                     //gender
-                    gender = parser.getAttributeValue(null,AADHAR_GENDER_ATTR);
+                    gender = parser.getAttributeValue(null,DataAttributes.AADHAR_GENDER_ATTR);
                     // year of birth
-                    yearOfBirth = parser.getAttributeValue(null,AADHAR_YOB_ATTR);
+                    yearOfBirth = parser.getAttributeValue(null,DataAttributes.AADHAR_YOB_ATTR);
                     // care of
-                    careOf = parser.getAttributeValue(null,AADHAR_CO_ATTR);
+                    careOf = parser.getAttributeValue(null,DataAttributes.AADHAR_CO_ATTR);
                     // village Tehsil
-                    villageTehsil = parser.getAttributeValue(null,AADHAR_VTC_ATTR);
+                    villageTehsil = parser.getAttributeValue(null,DataAttributes.AADHAR_VTC_ATTR);
                     // Post Office
-                    postOffice = parser.getAttributeValue(null,AADHAR_PO_ATTR);
+                    postOffice = parser.getAttributeValue(null,DataAttributes.AADHAR_PO_ATTR);
                     // district
-                    district = parser.getAttributeValue(null,AADHAR_DIST_ATTR);
+                    district = parser.getAttributeValue(null,DataAttributes.AADHAR_DIST_ATTR);
                     // state
-                    state = parser.getAttributeValue(null,AADHAR_STATE_ATTR);
+                    state = parser.getAttributeValue(null,DataAttributes.AADHAR_STATE_ATTR);
                     // Post Code
-                    postCode = parser.getAttributeValue(null,AADHAR_PC_ATTR);
+                    postCode = parser.getAttributeValue(null,DataAttributes.AADHAR_PC_ATTR);
 
                 } else if(eventType == XmlPullParser.END_TAG) {
                     Log.d("Rajdeol","End tag "+parser.getName());
@@ -174,7 +163,6 @@ public class HomeActivity extends AppCompatActivity {
 
             // display the data on screen
             displayScannedData();
-            Toast.makeText(getApplicationContext(),"End of XML Document", Toast.LENGTH_SHORT).show();
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -234,16 +222,34 @@ public class HomeActivity extends AppCompatActivity {
         // create json object
         JSONObject aadhaarData = new JSONObject();
         try {
-            aadhaarData.put(AADHAR_UID_ATTR, uid);
-            aadhaarData.put(AADHAR_NAME_ATTR, name);
-            aadhaarData.put(AADHAR_GENDER_ATTR, gender);
-            aadhaarData.put(AADHAR_YOB_ATTR, yearOfBirth);
-            aadhaarData.put(AADHAR_CO_ATTR, careOf);
-            aadhaarData.put(AADHAR_VTC_ATTR, villageTehsil);
-            aadhaarData.put(AADHAR_PO_ATTR, postOffice);
-            aadhaarData.put(AADHAR_DIST_ATTR, district);
-            aadhaarData.put(AADHAR_STATE_ATTR, state);
-            aadhaarData.put(AADHAR_PC_ATTR, postCode);
+            aadhaarData.put(DataAttributes.AADHAR_UID_ATTR, uid);
+
+            if(name == null){name = "";}
+            aadhaarData.put(DataAttributes.AADHAR_NAME_ATTR, name);
+
+            if(gender == null){gender = "";}
+            aadhaarData.put(DataAttributes.AADHAR_GENDER_ATTR, gender);
+
+            if(yearOfBirth == null){yearOfBirth = "";}
+            aadhaarData.put(DataAttributes.AADHAR_YOB_ATTR, yearOfBirth);
+
+            if(careOf == null){careOf = "";}
+            aadhaarData.put(DataAttributes.AADHAR_CO_ATTR, careOf);
+
+            if(villageTehsil == null){villageTehsil = "";}
+            aadhaarData.put(DataAttributes.AADHAR_VTC_ATTR, villageTehsil);
+
+            if(postOffice == null){postOffice = "";}
+            aadhaarData.put(DataAttributes.AADHAR_PO_ATTR, postOffice);
+
+            if(district == null){district = "";}
+            aadhaarData.put(DataAttributes.AADHAR_DIST_ATTR, district);
+
+            if(state == null){state = "";}
+            aadhaarData.put(DataAttributes.AADHAR_STATE_ATTR, state);
+
+            if(postCode == null){postCode = "";}
+            aadhaarData.put(DataAttributes.AADHAR_PC_ATTR, postCode);
 
             // read data from storage
             String storageData = storage.readFromFile();
@@ -261,9 +267,12 @@ public class HomeActivity extends AppCompatActivity {
             if(storageDataArray.length() > 0){
                 // check if data already exists
                 for(int i = 0; i<storageDataArray.length();i++){
-                    String dataUid = storageDataArray.getJSONObject(i).getString(AADHAR_UID_ATTR);
+                    String dataUid = storageDataArray.getJSONObject(i).getString(DataAttributes.AADHAR_UID_ATTR);
                     if(uid.equals(dataUid)){
                         // do not save anything and go back
+                        // show home screen
+                        tv_cancel_action.performClick();
+
                         return;
                     }
                 }
@@ -280,5 +289,17 @@ public class HomeActivity extends AppCompatActivity {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    /**
+     * onclick handler for show saved cards
+     * this will start the SavedAadhaarCardActivity
+     * @param view
+     */
+    public void showSavedCards(View view){
+        // intent for SavedAadhaarcardActivity
+        Intent intent = new Intent(this,SavedAadhaarCardActivity.class);
+        // Start Activity
+        startActivity(intent);
     }
 }// EO class

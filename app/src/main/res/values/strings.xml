@@ -18,4 +18,7 @@
     <string name="label_pc">POSTAL CODE</string>
     <string name="label_save">SAVE</string>
     <string name="label_cancel">CANCEL</string>
+    <string name="no_saved_card">There Is no Saved Aadhar Card</string>
+    <string name="label_home">HOME</string>
+    <string name="label_delete">DELETE</string>
 </resources>
