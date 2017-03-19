@@ -107,7 +107,7 @@ public class SavedAadhaarCardActivity extends AppCompatActivity {
 
                 // save the updated list
                 storage.writeToFile(updatedStorageDataArray.toString());
-                
+
                 // Hide the list if all cards are deleted
                 if(updatedStorageDataArray.length() < 1){
                     // hide list and show message

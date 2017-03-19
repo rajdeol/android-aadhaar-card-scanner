@@ -97,7 +97,12 @@ public class HomeActivity extends AppCompatActivity {
             String scanFormat = scanningResult.getFormatName();
 
             // process received data
-            processScannedData(scanContent);
+            if(scanContent != null && !scanContent.isEmpty()){
+                processScannedData(scanContent);
+            }else{
+                Toast toast = Toast.makeText(getApplicationContext(),"Scan Cancelled", Toast.LENGTH_SHORT);
+                toast.show();
+            }
 
         }else{
             Toast toast = Toast.makeText(getApplicationContext(),"No scan data received!", Toast.LENGTH_SHORT);
