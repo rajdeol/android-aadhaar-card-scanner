@@ -1,6 +1,10 @@
 package com.rajdeol.aadhaarreader;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +43,8 @@ public class HomeActivity extends AppCompatActivity {
     // Storage
     Storage storage;
 
+    private static final int MY_CAMERA_REQUEST_CODE = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,11 +74,23 @@ public class HomeActivity extends AppCompatActivity {
         storage = new Storage(this);
     }
 
+    public void checkCameraPermission (){
+
+    }
+
     /**
      * onclick handler for scan new card
      * @param view
      */
     public void scanNow( View view){
+        // we need to check if the user has granted the camera permissions
+        // otherwise scanner will not work
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+            return;
+        }
+
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
         integrator.setPrompt("Scan a Aadharcard QR Code");
