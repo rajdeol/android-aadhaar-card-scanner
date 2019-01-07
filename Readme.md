@@ -13,4 +13,4 @@ This is a simple Android application to scan QRcode printen to Aadhaar Cards. Th
 * User can View the list of saved Aadhaar cards
 * User can delete saved Aadhaar Card
 
-A complete blog post detailing everything about this application can be found at http://blog.whomeninja.in/android-aadhaar-card-scanner/
+A complete blog post detailing everything about this application can be found at https://rajislearning.com/android-aadhaar-card-scanner/
