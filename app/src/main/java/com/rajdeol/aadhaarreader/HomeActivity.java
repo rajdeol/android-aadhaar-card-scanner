@@ -1,6 +1,7 @@
 package com.rajdeol.aadhaarreader;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -16,7 +17,10 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.rajdeol.aadhaarreader.utils.AadharCard;
 import com.rajdeol.aadhaarreader.utils.DataAttributes;
+import com.rajdeol.aadhaarreader.utils.QrCodeException;
+import com.rajdeol.aadhaarreader.utils.SecureQrCode;
 import com.rajdeol.aadhaarreader.utils.Storage;
 
 import org.json.JSONArray;
@@ -26,14 +30,24 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.zip.DataFormatException;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.Inflater;
 
 public class HomeActivity extends AppCompatActivity {
 
     // variables to store extracted xml data
     String uid,name,gender,yearOfBirth,careOf,villageTehsil,postOffice,district,state,postCode;
+    AadharCard aadharData;
 
     // UI Elements
     TextView tv_sd_uid,tv_sd_name,tv_sd_gender,tv_sd_yob,tv_sd_co,tv_sd_vtc,tv_sd_po,tv_sd_dist,
@@ -129,11 +143,13 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     * process xml string received from aadhaar card QR code
+     * process encoded string received from aadhaar card QR code
      * @param scanData
      */
     protected void processScannedData(String scanData){
         Log.d("Rajdeol",scanData);
+        // todo - check if we received an xml to support old format
+        // and then process scure aadharcard rather than try - catch
         XmlPullParserFactory pullParserFactory;
 
         try {
@@ -144,6 +160,7 @@ public class HomeActivity extends AppCompatActivity {
 
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(new StringReader(scanData));
+            aadharData = new AadharCard();
 
             // parse the XML
             int eventType = parser.getEventType();
@@ -155,23 +172,23 @@ public class HomeActivity extends AppCompatActivity {
                     //uid
                     uid = parser.getAttributeValue(null,DataAttributes.AADHAR_UID_ATTR);
                     //name
-                    name = parser.getAttributeValue(null,DataAttributes.AADHAR_NAME_ATTR);
+                    aadharData.setName(parser.getAttributeValue(null,DataAttributes.AADHAR_NAME_ATTR));
                     //gender
-                    gender = parser.getAttributeValue(null,DataAttributes.AADHAR_GENDER_ATTR);
+                    aadharData.setGender(parser.getAttributeValue(null,DataAttributes.AADHAR_GENDER_ATTR));
                     // year of birth
-                    yearOfBirth = parser.getAttributeValue(null,DataAttributes.AADHAR_YOB_ATTR);
+                    aadharData.setDateOfBirth(parser.getAttributeValue(null,DataAttributes.AADHAR_YOB_ATTR));
                     // care of
-                    careOf = parser.getAttributeValue(null,DataAttributes.AADHAR_CO_ATTR);
+                    aadharData.setCareOf(parser.getAttributeValue(null,DataAttributes.AADHAR_CO_ATTR));
                     // village Tehsil
-                    villageTehsil = parser.getAttributeValue(null,DataAttributes.AADHAR_VTC_ATTR);
+                    aadharData.setVtc(parser.getAttributeValue(null,DataAttributes.AADHAR_VTC_ATTR));
                     // Post Office
-                    postOffice = parser.getAttributeValue(null,DataAttributes.AADHAR_PO_ATTR);
+                    aadharData.setPostOffice(parser.getAttributeValue(null,DataAttributes.AADHAR_PO_ATTR));
                     // district
-                    district = parser.getAttributeValue(null,DataAttributes.AADHAR_DIST_ATTR);
+                    aadharData.setDistrict(parser.getAttributeValue(null,DataAttributes.AADHAR_DIST_ATTR));
                     // state
-                    state = parser.getAttributeValue(null,DataAttributes.AADHAR_STATE_ATTR);
+                    aadharData.setState(parser.getAttributeValue(null,DataAttributes.AADHAR_STATE_ATTR));
                     // Post Code
-                    postCode = parser.getAttributeValue(null,DataAttributes.AADHAR_PC_ATTR);
+                    aadharData.setPinCode(parser.getAttributeValue(null,DataAttributes.AADHAR_PC_ATTR));
 
                 } else if(eventType == XmlPullParser.END_TAG) {
                     Log.d("Rajdeol","End tag "+parser.getName());
@@ -187,12 +204,27 @@ public class HomeActivity extends AppCompatActivity {
             // display the data on screen
             displayScannedData();
         } catch (XmlPullParserException e) {
+            //showErrorPrompt("Error in processing QRcode XML");
+            // check and process secure QR Code
+            processEncodedScannedData(scanData);
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }// EO function
+
+    protected void processEncodedScannedData(String scanData){
+        try {
+            SecureQrCode decodedData = new SecureQrCode(this,scanData);
+            aadharData = decodedData.getScannedAadharCard();
+            // display the Aadhar Data
+            displayScannedData();
+        } catch (QrCodeException e) {
+            showErrorPrompt(e.toString());
+            e.printStackTrace();
+        }
+    }
 
     /**
      * show scanned information
@@ -216,15 +248,15 @@ public class HomeActivity extends AppCompatActivity {
 
         // update UI Elements
         tv_sd_uid.setText(uid);
-        tv_sd_name.setText(name);
-        tv_sd_gender.setText(gender);
-        tv_sd_yob.setText(yearOfBirth);
-        tv_sd_co.setText(careOf);
-        tv_sd_vtc.setText(villageTehsil);
-        tv_sd_po.setText(postOffice);
-        tv_sd_dist.setText(district);
-        tv_sd_state.setText(state);
-        tv_sd_pc.setText(postCode);
+        tv_sd_name.setText(aadharData.getName());
+        tv_sd_gender.setText(aadharData.getGender());
+        tv_sd_yob.setText(aadharData.getDateOfBirth());
+        tv_sd_co.setText(aadharData.getCareOf());
+        tv_sd_vtc.setText(aadharData.getVtc());
+        tv_sd_po.setText(aadharData.getPostOffice());
+        tv_sd_dist.setText(aadharData.getDistrict());
+        tv_sd_state.setText(aadharData.getState());
+        tv_sd_pc.setText(aadharData.getPinCode());
     }
 
     /**
@@ -324,5 +356,13 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = new Intent(this,SavedAadhaarCardActivity.class);
         // Start Activity
         startActivity(intent);
+    }
+
+    public void showErrorPrompt(String message){
+       final AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        AlertDialog ad = adb.create();
+        ad.setMessage(message);
+        ad.show();
+
     }
 }// EO class
