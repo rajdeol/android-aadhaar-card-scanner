@@ -64,7 +64,7 @@ public class CardListAdapter extends ArrayAdapter<ArrayList>{
             uid = jObj.getString(DataAttributes.AADHAR_UID_ATTR);
             name = jObj.getString(DataAttributes.AADHAR_NAME_ATTR);
             gender = jObj.getString(DataAttributes.AADHAR_GENDER_ATTR);
-            yearOfBirth = jObj.getString(DataAttributes.AADHAR_YOB_ATTR);
+            yearOfBirth = jObj.getString(DataAttributes.AADHAR_DOB_ATTR);
             careOf = jObj.getString(DataAttributes.AADHAR_CO_ATTR);
             villageTehsil = jObj.getString(DataAttributes.AADHAR_VTC_ATTR);
             postOffice = jObj.getString(DataAttributes.AADHAR_PO_ATTR);

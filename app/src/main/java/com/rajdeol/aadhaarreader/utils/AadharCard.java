@@ -3,6 +3,7 @@ package com.rajdeol.aadhaarreader.utils;
 import android.graphics.Bitmap;
 
 public class AadharCard {
+    private String uuid;
     private String name;
     private String dateOfBirth;
     private String gender;
@@ -22,6 +23,7 @@ public class AadharCard {
     private String mobile;
     private String signature;
 
+    public void setUuid(String aUuid){ name = aUuid; }
     public void setName(String aName){ name = aName; }
     public void setDateOfBirth(String aDateOfBirth){
         dateOfBirth = aDateOfBirth;
@@ -73,8 +75,33 @@ public class AadharCard {
         signature = aSignature;
     }
 
+    public AadharCard(){
+        uuid = "";
+        name = "";
+        dateOfBirth = "";
+        gender = "";
+        careOf = "";
+        district = "";
+        landmark = "";
+        house = "";
+        location = "";
+        pinCode = "";
+        postOffice = "";
+        state = "";
+        street = "";
+        subDistrict = "";
+        vtc = "";
+        email = "";
+        mobile = "";
+        signature = "";
+    }
+
     public String getName() {
         return name;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     public String getDateOfBirth() {
