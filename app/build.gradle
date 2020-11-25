@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.2'
 
     defaultConfig {
         applicationId "com.rajdeol.aadhaarreader"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
     }
@@ -30,7 +30,7 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
-    implementation 'com.android.support:appcompat-v7:23.4.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
 
     // Added by raj
     // Supports Android 4.0.3 and later (API level 15)
@@ -49,6 +49,9 @@ dependencies {
     // This mostly affects encoding, but you should test if you plan to support these versions.
     // Older versions e.g. 2.2 may also work if you need support for older Android versions.
     implementation 'com.google.zxing:core:3.0.1'
+
+    //for material design alert box
+    implementation 'com.github.TutorialsAndroid:KAlertDialog:v4.1'
 
     // Awesome JP2000 implemented for Android source: https://github.com/ThalesGroup/JP2ForAndroid
     implementation 'com.gemalto.jp2:jp2-android:1.0'

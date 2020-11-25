@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.kinda.alert.KAlertDialog;
 import com.rajdeol.aadhaarreader.utils.AadharCard;
 import com.rajdeol.aadhaarreader.utils.DataAttributes;
 import com.rajdeol.aadhaarreader.utils.QrCodeException;
@@ -236,6 +237,7 @@ public class HomeActivity extends AppCompatActivity {
             SecureQrCode decodedData = new SecureQrCode(this,scanData);
             aadharData = decodedData.getScannedAadharCard();
             // display the Aadhar Data
+            showSuccessPrompt("Scanned Aadhar Card Successfully");
             displayScannedData();
         } catch (QrCodeException e) {
             showErrorPrompt(e.toString());
@@ -398,10 +400,18 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void showErrorPrompt(String message){
-       final AlertDialog.Builder adb = new AlertDialog.Builder(this);
-        AlertDialog ad = adb.create();
-        ad.setMessage(message);
-        ad.show();
+        new KAlertDialog(this, KAlertDialog.ERROR_TYPE)
+                .setTitleText("Oops...")
+                .setContentText(message)
+                .show();
 
+
+    }
+
+    public void showSuccessPrompt(String message){
+        new KAlertDialog(this, KAlertDialog.SUCCESS_TYPE)
+                .setTitleText("Success")
+                .setContentText(message)
+                .show();
     }
 }// EO class
