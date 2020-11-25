@@ -1,15 +1,13 @@
 package com.rajdeol.aadhaarreader;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Xml;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,20 +29,10 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.DataFormatException;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.Inflater;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -140,13 +128,11 @@ public class HomeActivity extends AppCompatActivity {
             if(scanContent != null && !scanContent.isEmpty()){
                 processScannedData(scanContent);
             }else{
-                Toast toast = Toast.makeText(getApplicationContext(),"Scan Cancelled", Toast.LENGTH_SHORT);
-                toast.show();
+                showWarningPrompt("Scan Cancelled");
             }
 
         }else{
-            Toast toast = Toast.makeText(getApplicationContext(),"No scan data received!", Toast.LENGTH_SHORT);
-            toast.show();
+            showWarningPrompt("No scan data received!");
         }
     }
 
@@ -401,7 +387,7 @@ public class HomeActivity extends AppCompatActivity {
 
     public void showErrorPrompt(String message){
         new KAlertDialog(this, KAlertDialog.ERROR_TYPE)
-                .setTitleText("Oops...")
+                .setTitleText("Error")
                 .setContentText(message)
                 .show();
 
@@ -411,6 +397,12 @@ public class HomeActivity extends AppCompatActivity {
     public void showSuccessPrompt(String message){
         new KAlertDialog(this, KAlertDialog.SUCCESS_TYPE)
                 .setTitleText("Success")
+                .setContentText(message)
+                .show();
+    }
+
+    public void showWarningPrompt(String message){
+        new KAlertDialog(this, KAlertDialog.WARNING_TYPE)
                 .setContentText(message)
                 .show();
     }
